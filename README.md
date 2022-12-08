@@ -30,7 +30,7 @@ My solution is the ensemble of 8 models
 
 ## What worked
 
-- **Layer-wise learning rate decay (LLRD)**
+### 1. **Layer-wise learning rate decay (LLRD)**
 
 The bottom layer of a transformer encodes more general information, while the top layer encodes information specific to a pre-trained task. If the bottom layer has higher learning rate, it is likely to lose general information. Likewise, if the top layer has lower learning rate, the parameters tend to fix to the pre-trained task, not fine-tuning task. Therefore, layer-wise learning rate decay that sets higher LR to the top layer, and lower LR to the bottom layer, can make the model become specific to the fine-tuning task while maintaining general information.
 
@@ -39,7 +39,7 @@ The bottom layer of a transformer encodes more general information, while the to
 | Baseline |  |  |  |
 | Baseline + LLRD |  |  |  |
 
-- **Re-initializing the last two layer**
+### 2. **Re-initializing the last two layer**
 
 As the pre-trained top layer specializes to the pre-trained tasks, using the entire pre-trained layers for a fine-tuning task slows down training and hurts performance. Through re-initializing the last two layer, the model can forget information specific to the pre-training task, and increase performance to the fine-tuning task.
 
@@ -48,7 +48,7 @@ As the pre-trained top layer specializes to the pre-trained tasks, using the ent
 | Baseline |  |  |  |
 | Baseline + LLRD + Re-init | 0.4547 | 0.440144 | 0.442563 |
 
-- **Pseudo Labeling**
+### 3. **Pseudo Labeling**
 
 As this is the third Feedback competition (FB3), there are other kinds of Feedback competition data ([FB1](https://www.kaggle.com/competitions/feedback-prize-2021) and [FB2](https://www.kaggle.com/competitions/feedback-prize-effectiveness)). The distribution of FB2 data is quite different from that of FB3 data, I selected FB1 data for pseudo labeling. 
 
@@ -56,7 +56,7 @@ As this is the third Feedback competition (FB3), there are other kinds of Feedba
 
 The process of pseudo labeling is as follows
 
-**A. Generate Pseudo Labels**
+#### **A. Generate Pseudo Labels**
 
   (1) The format of FB1 is transformed into that of FB3
 
@@ -70,7 +70,7 @@ The process of pseudo labeling is as follows
 
    (0-fold pseudo data includes 1~4 folds of FB3 data and FB1 data predicted by 0-fold model.)
 
-**B. Train the models with pseudo data**
+#### **B. Train the models with pseudo data**
 
  At this stage, I trained the models with two different strategies with pseudo data.
 
@@ -90,7 +90,7 @@ The process of pseudo labeling is as follows
 
 ## What didn’t worked
 
-- **Augmentations**
+### 1. **Augmentations**
 
 ![2.PNG](image/2.png)
 
@@ -98,7 +98,7 @@ Due to the lack of the labels 1.0, 1.5, 4.5, and 5.0, I was trying to increase t
 
 However, it increased CV (+0.1~0.2) because replacing the word affects ‘cohesion’, ‘syntax’, ‘grammar’ and ‘convention’ included in the labels, resulting in inconsistency between the original labels and the augmented texts. Therefore, I did not apply the augmentation to the final model.
 
-- **Weighted Loss**
+### 2. **Weighted Loss**
 
 ![1.PNG](image/1.png)
 
@@ -112,7 +112,7 @@ The above figures are distributions of ground truth labels and predictions of th
 
 However, all the above method didn’t work. They increased CV (+0.2~0.3), so I didn’t adopt weighted loss.
 
-- **Fast Gradient Method, Dropout**
+### 3. **Fast Gradient Method, Dropout**
 
 | Baseline | avg_train_loss | avg_val_loss |
 | --- | --- | --- |
