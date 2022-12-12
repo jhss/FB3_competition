@@ -85,7 +85,7 @@ The process of pseudo labeling is as follows
 
 **(5-2)** approach increases CV a lot, so I didn’t submit **(5-2)** model. (Lower is better for CV and LB)
 
-**(5-1)** approach didn’t change CV, so I submit the **(5-1)** model, resulting in decreasing LB.
+**(5-1)** approach decreases CV a little, so I submit the **(5-1)** model, resulting in decreasing LB.
 
 |  |     CV |   Public |  private |
 | --- | --- | --- | --- |
