@@ -1,32 +1,40 @@
-# README.md
+# Feedback Prize 3 Competition
+
+This is a repository that summarizes the methods I used in the **[Feedback Prize - English Language Learning](https://www.kaggle.com/c/feedback-prize-english-language-learning).** It is a task that evaluates the score of each essay by the six analytic measure: cohesion , syntax, vocabulary, phraseology, grammar, and conventions.
 
 
-- [ ]  **Base line, LLRD 실험 cv, lb 측정**
-- [ ]  **Base line, LLRD + re-init 실험 cv, lb 측정**
-- [ ]  **Base line, LLRD + re-init + pseudo 실험 cv, lb 측정**
-- [x]  부족한 그림 채우기
-- [x]  Overview 정리
-- [ ]  train 노트북
-- [ ]  Infer 노트북
+### Goal of the Competition
 
-## Overview
+The goal of this competition is to assess the language proficiency of 8th-12th grade English Language Learners (ELLs). Utilizing a dataset of essays written by ELLs will help to develop proficiency models that better supports all students.
 
-This is a repository that summarizes the methods I used in the ****[Feedback Prize - English Language Learning](https://www.kaggle.com/c/feedback-prize-english-language-learning).** It is a task that evaluates the score of each essay by the six analytic measure: cohesion , syntax, vocabulary, phraseology, grammar, and conventions.
+### Dataset Description
+
+The dataset presented here (the ELLIPSE corpus) comprises argumentative essays written by 8th-12th grade English Language Learners (ELLs). The essays have been scored according to six analytic measures: cohesion, syntax, vocabulary, phraseology, grammar, and conventions.
+
+Each measure represents a component of proficiency in essay writing, with greater scores corresponding to greater proficiency in that measure. The scores range from 1.0 to 5.0 in increments of 0.5. Your task is to predict the score of each of the six measures for the essays given in the test set.
+
+## Method Overview
 
 Like most top solutions, the main method that worked are layer-wise learning rate decay, re-initializing the last two layers, and pseudo-labeling.
 
 My solution is the ensemble of 8 models
 
-|       model |     changed |            CV |
-| --- | --- | --- |
-| deberta-v3-base | LLRD + re-init + max_token_length = 1428 | 0.4547 |
-| deberta-v3-base | LLRD + re-init + max_token_length = 768 | 0.4543 |
-| deberta-v3-base | LLRD + re-init + max_token_length = 1428 + pseudo labeling | 0.4544 | 
-| deberta-v3-large | LLRD + re-init | 0.4553 |
-| deberta-v3-large | different seed | 0.4548 |
-| deberta-v3-large | different seed | 0.4569 |
-| deberta-v2-xlarge | LLRD + re-init | 0.4604 |
-| deberta-v2-xlarge-mnli | LLRD + re-init | 0.4675 |
+|       model |     changed |            CV | Source |
+| --- | --- | --- | --- |
+| deberta-v3-base | LLRD + re-init + max_token_length = 1428 | 0.4547 | Ours |
+| deberta-v3-base | LLRD + re-init + max_token_length = 768 | 0.4543 | Ours |
+| deberta-v3-base | LLRD + re-init + max_token_length = 1428 + pseudo labeling | 0.4544 | Ours |
+| deberta-v3-large | LLRD + re-init | 0.4553 | FB3 Deberta Family Inference |
+| deberta-v3-large | different seed | 0.4548 | FB3 Deberta Family Inference |
+| deberta-v3-large | different seed | 0.4569 | FB3 Deberta Family Inference |
+| deberta-v2-xlarge | LLRD + re-init | 0.4604 | FB3 Deberta Family Inference |
+| deberta-v2-xlarge-mnli | LLRD + re-init | 0.4675 | FB3 Deberta Family Inference |
+
+deberta-v3-large and xlarge models were brought from [FB3 Deberta Family Inference](https://www.kaggle.com/code/kojimar/fb3-deberta-family-inference-9-28-updated)
+
+## Final Result
+
+**587 / 2654 (Top 23%)** [link](https://www.kaggle.com/ju7on9/competitions?tab=completed)
 
 ## What worked
 
@@ -36,8 +44,8 @@ The bottom layer of a transformer encodes more general information, while the to
 
 |  |     CV |   Public |  private |
 | --- | --- | --- | --- |
-| Baseline |  |  |  |
-| Baseline + LLRD |  |  |  |
+| Baseline | 0.4557 | 0.443399 | 0.4423 |
+| Baseline + LLRD | 0.4547 | 0.44323 | 0.441697 |
 
 ### 2. **Re-initializing the last two layer**
 
@@ -45,8 +53,8 @@ As the pre-trained top layer specializes to the pre-trained tasks, using the ent
 
 |  |     CV |   Public |  private |
 | --- | --- | --- | --- |
-| Baseline |  |  |  |
-| Baseline + LLRD + Re-init | 0.4547 | 0.440144 | 0.442563 |
+| Baseline + LLRD | 0.4547 | 0.44323 | 0.441697 |
+| Baseline + LLRD + Re-init | 0.4547 | 0.440144 | 0.442562 |
 
 ### 3. **Pseudo Labeling**
 
@@ -85,7 +93,7 @@ The process of pseudo labeling is as follows
 
 |  |     CV |   Public |  private |
 | --- | --- | --- | --- |
-| Baseline (LLRD + re-init) | 0.4547 | 0.440144 | 0.442563 |
+| Baseline (LLRD + re-init) | 0.4547 | 0.440144 | 0.442562 |
 | Baseline + Pseudo Labeling | 0.4544 | 0.439471 | 0.442218 |
 
 ## What didn’t worked
@@ -94,7 +102,7 @@ The process of pseudo labeling is as follows
 
 ![2.PNG](image/2.png)
 
-Due to the lack of the labels 1.0, 1.5, 4.5, and 5.0, I was trying to increase the number of labels using [nlpaug](https://github.com/makcedward/nlpaug). I used `[ContextualWordEmbsAug](https://nlpaug.readthedocs.io/en/latest/augmenter/word/context_word_embs.html)` with bert-base to replace some part of words in the sentence by new words. 
+Due to the lack of the labels 1.0, 1.5, 4.5, and 5.0, I was trying to increase the number of labels using [nlpaug](https://github.com/makcedward/nlpaug). I used [ContextualWordEmbsAug](https://nlpaug.readthedocs.io/en/latest/augmenter/word/context_word_embs.html) with bert-base to replace some part of words in the sentence by new words. 
 
 However, it increased CV (+0.1~0.2) because replacing the word affects ‘cohesion’, ‘syntax’, ‘grammar’ and ‘convention’ included in the labels, resulting in inconsistency between the original labels and the augmented texts. Therefore, I did not apply the augmentation to the final model.
 
@@ -127,3 +135,7 @@ As shown in the figure above, the train loss is around 0.01~0.02 for each epoch,
 ## Important Citations
 
 [https://www.kaggle.com/code/rhtsingh/on-stability-of-few-sample-transformer-fine-tuning/notebook](https://www.kaggle.com/code/rhtsingh/on-stability-of-few-sample-transformer-fine-tuning/notebook)
+
+[https://www.kaggle.com/code/yasufuminakama/fb3-deberta-v3-base-baseline-train](https://www.kaggle.com/code/yasufuminakama/fb3-deberta-v3-base-baseline-train)
+
+[https://www.kaggle.com/code/kojimar/fb3-single-pytorch-model-train](https://www.kaggle.com/code/kojimar/fb3-single-pytorch-model-train)
