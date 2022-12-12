@@ -66,30 +66,26 @@ The process of pseudo labeling is as follows
 
 #### **A. Generate Pseudo Labels**
 
-  (1) The format of FB1 is transformed into that of FB3
+**(1)** The format of FB1 is transformed into that of FB3
 
-(2) The FB3 data was split by 5 folds with [`MultilabelStratifiedKFold`](https://github.com/trent-b/iterative-stratification#multilabelstratifiedkfold) , and the 5 models were trained with each set of the folds.
+**(2)** The FB3 data was split by 5 folds with [`MultilabelStratifiedKFold`](https://github.com/trent-b/iterative-stratification#multilabelstratifiedkfold) , and the 5 models were trained with each set of the folds. (The training data of 0-fold model are 1~4 folds, and validation data is 0 fold)
 
-(The training data of 0-fold model are 1~4 folds, and validation data is 0 fold)
+**(3)** Each model predicts FB1 data, resulting in five pseudo labeling data.
 
-(3) Each model predicts FB1 data, resulting in five pseudo labeling data.
-
-(4) FB3 data is appended to FB1 pseudo labeling data, resulting in the five set of data.
-
-   (0-fold pseudo data includes 1~4 folds of FB3 data and FB1 data predicted by 0-fold model.)
+**(4)** FB3 data is appended to FB1 pseudo labeling data, resulting in the five set of data. (0-fold pseudo data includes 1~4 folds of FB3 data and FB1 data predicted by 0-fold model.)
 
 #### **B. Train the models with pseudo data**
 
  At this stage, I trained the models with two different strategies with pseudo data.
 
- (5-1) Train new models from scratch with pseudo data
+ **(5-1)** Train new models from scratch with pseudo data
 
- (5-2) The model created in the process of generating the pseudo label was re-learned using the pseudo label.
+ **(5-2)** The model created in the process of generating the pseudo label was re-learned using the pseudo label.
     (ex. 0-fold model is trained with FB1 data predicted by 0-fold model)
 
-5-2 approach increases CV a lot, so I didn’t submit 5-2 model. (Lower is better for CV and LB)
+**(5-2)** approach increases CV a lot, so I didn’t submit **(5-2)** model. (Lower is better for CV and LB)
 
-5-1 approach didn’t change CV, so I submit the 5-1 model, resulting in decreasing LB
+**(5-1)** approach didn’t change CV, so I submit the **(5-1)** model, resulting in decreasing LB.
 
 |  |     CV |   Public |  private |
 | --- | --- | --- | --- |
@@ -112,11 +108,11 @@ However, it increased CV (+0.1~0.2) because replacing the word affects ‘cohesi
 
 The above figures are distributions of ground truth labels and predictions of the baseline for 1.0 score examples of each category. As shown in the figure above, the prediction of the baseline for 1.0, 1.5, 4.5, and 5.0 tends to be biased to 3.0. In order for the model to well predict the corresponding labels, I used weighted loss function for the corresponding labels (twice for 1.0, 1.5, 4.5 and 5.0) during the training. And I trained the model in several different ways.
 
-(1) After training the model with the original loss function during 5 epochs, the weighted loss is used during the next 5 epochs.
+**(1)** After training the model with the original loss function during 5 epochs, the weighted loss is used during the next 5 epochs.
 
-(2) After training the model with the weighted loss during 5 epochs, the original loss is used during the next 5 epochs.
+**(2)** After training the model with the weighted loss during 5 epochs, the original loss is used during the next 5 epochs.
 
-(3) Only used weighted loss for 5 epochs
+**(3)** Only used weighted loss for 5 epochs
 
 However, all the above method didn’t work. They increased CV (+0.2~0.3), so I didn’t adopt weighted loss.
 
