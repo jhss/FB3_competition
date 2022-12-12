@@ -1,6 +1,6 @@
 # Feedback Prize 3 Competition
 
-This is a repository that summarizes the methods I used in the **[Feedback Prize - English Language Learning](https://www.kaggle.com/c/feedback-prize-english-language-learning).** It is a task that evaluates the score of each essay by the six analytic measure: cohesion , syntax, vocabulary, phraseology, grammar, and conventions.
+This is a repository that summarizes the methods I used in the **[Feedback Prize - English Language Learning](https://www.kaggle.com/c/feedback-prize-english-language-learning).** It is a task that evaluates the score of each essay by the six analytic measure: cohesion, syntax, vocabulary, phraseology, grammar, and conventions.
 
 
 ### Goal of the Competition
