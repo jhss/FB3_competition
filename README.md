@@ -47,9 +47,9 @@ The bottom layer of a transformer encodes more general information, while the to
 | Baseline | 0.4557 | 0.443399 | 0.4423 |
 | Baseline + LLRD | 0.4547 | 0.44323 | 0.441697 |
 
-### 2. **Re-initializing the last two layer**
+### 2. **Re-initializing the last layer**
 
-As the pre-trained top layer specializes to the pre-trained tasks, using the entire pre-trained layers for a fine-tuning task slows down training and hurts performance. Through re-initializing the last two layer, the model can forget information specific to the pre-training task, and increase performance to the fine-tuning task.
+As the pre-trained top layer specializes to the pre-trained tasks, using the entire pre-trained layers for a fine-tuning task slows down training and hurts performance. Through re-initializing the last layer, the model can forget information specific to the pre-training task, and increase performance to the fine-tuning task. However, it decreases only CV and LB, not private score.
 
 |  |     CV |   Public |  private |
 | --- | --- | --- | --- |
