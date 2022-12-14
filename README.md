@@ -60,7 +60,7 @@ As the pre-trained top layer specializes to the pre-trained tasks, using the ent
 
 As this is the third Feedback competition (FB3), there are other kinds of Feedback competition data ([FB1](https://www.kaggle.com/competitions/feedback-prize-2021) and [FB2](https://www.kaggle.com/competitions/feedback-prize-effectiveness)). The distribution of FB2 data is quite different from that of FB3 data, I selected FB1 data for pseudo labeling. 
 
-![3.PNG](image/3.png)
+![3.PNG](image/3.PNG)
 
 The process of pseudo labeling is as follows
 
